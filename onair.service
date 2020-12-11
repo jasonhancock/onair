@@ -1,0 +1,17 @@
+[Unit]
+Description=onair
+After=basic.target
+
+[Service]
+ExecStart=/bin/sh -c "/usr/bin/python3 /home/pi/onair.py  >> /var/log/onair.log 2>&1"
+ExecStop=/usr/bin/python3 /home/pi/off.py
+Restart=always
+RestartSec=3
+User=root
+KillMode=control-group
+LimitNOFILE=infinity
+PrivateTmp=false
+
+[Install]
+WantedBy=multi-user.target
+

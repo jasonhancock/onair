@@ -1,0 +1,16 @@
+[Unit]
+Description=onair-web
+After=basic.target
+
+[Service]
+ExecStart=/bin/sh -c "/home/pi/onair  >> /var/log/onair-web.log 2>&1"
+Restart=always
+RestartSec=3
+User=pi
+KillMode=control-group
+LimitNOFILE=infinity
+PrivateTmp=false
+
+[Install]
+WantedBy=multi-user.target
+
