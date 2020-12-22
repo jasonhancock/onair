@@ -32,6 +32,11 @@ func turnOn(w http.ResponseWriter, r *http.Request) {
 }
 
 func turnOff(w http.ResponseWriter, r *http.Request) {
+	if _, err := os.Stat(file); os.IsNotExist(err) {
+		// If the file doesn't exist, bail
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		return
+	}
 	if err := os.Remove(file); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -111,7 +116,7 @@ const tmpl = `<!doctype html>
 
 <footer class="footer mt-auto py-3 bg-light">
   <div class="container">
-    <span class="text-muted">Place sticky footer content here.</span>
+    <span class="text-muted">Built by <a href="https://twitter.com/jsnby">Jason Hancock</a></span>
   </div>
 </footer>
 
