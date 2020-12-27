@@ -1,15 +1,14 @@
 package main
 
 import (
-	"bytes"
 	"context"
 	"flag"
 	"log"
 	"net/http"
-	"os/exec"
 	"time"
 
 	"github.com/jasonhancock/runner"
+	ps "github.com/mitchellh/go-ps"
 )
 
 func main() {
@@ -56,14 +55,15 @@ func run(ctx context.Context, period time.Duration, action func(on bool)) {
 }
 
 func onZoom() (bool, error) {
-	out, err := exec.Command("ps", "aux").CombinedOutput()
+	p, err := ps.Processes()
 	if err != nil {
 		return false, err
 	}
 
-	if bytes.Contains(out, []byte("cpthost.app")) {
-		return true, nil
+	for _, v := range p {
+		if v.Executable() == "CptHost" {
+			return true, nil
+		}
 	}
-
 	return false, nil
 }
